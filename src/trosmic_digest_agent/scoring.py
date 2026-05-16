@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from trosmic_digest_agent.models import Article, AgentConfig
+from trosmic_digest_agent.models import AgentConfig, Article
 
 
 def score_articles(
@@ -10,7 +10,7 @@ def score_articles(
     config: AgentConfig,
     now: datetime | None = None,
 ) -> list[Article]:
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
     scored: list[Article] = []
 
     for article in articles:
@@ -35,9 +35,9 @@ def _recency_score(article: Article, now: datetime) -> float:
     if not published:
         return 0.0
     if published.tzinfo is None:
-        published = published.replace(tzinfo=timezone.utc)
+        published = published.replace(tzinfo=UTC)
     if now.tzinfo is None:
-        now = now.replace(tzinfo=timezone.utc)
+        now = now.replace(tzinfo=UTC)
 
     age_hours = max((now - published).total_seconds() / 3600, 0)
     if age_hours <= 24:

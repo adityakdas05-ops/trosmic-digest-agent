@@ -65,7 +65,7 @@ PYTHONPATH=src uv run python -m trosmic_digest_agent.scheduler --time 08:00
 Install optional remote-agent dependencies only when you need the Band runtime:
 
 ```bash
-uv pip install thenvoi langchain-openai langgraph openai pyyaml
+uv pip install "thenvoi-sdk[langgraph]" openai pyyaml
 PYTHONPATH=src uv run python -m trosmic_digest_agent.band_app
 ```
 

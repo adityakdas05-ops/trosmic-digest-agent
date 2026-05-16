@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from difflib import SequenceMatcher
 import re
+from difflib import SequenceMatcher
 
 from trosmic_digest_agent.models import Article
 

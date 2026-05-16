@@ -17,4 +17,8 @@ def _split_sentences(text: str) -> list[str]:
     cleaned = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).strip()
     if not cleaned:
         return []
-    return [sentence.strip() for sentence in re.split(r"(?<=[.!?])\s+", cleaned) if sentence.strip()]
+    return [
+        sentence.strip()
+        for sentence in re.split(r"(?<=[.!?])\s+", cleaned)
+        if sentence.strip()
+    ]

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from trosmic_digest_agent.connectors import ManualURLConnector, RSSConnector
 from trosmic_digest_agent.dedupe import dedupe_articles
@@ -25,7 +25,7 @@ def build_digest(config: AgentConfig, date: str | None = None) -> Digest:
     limited = scored[: config.max_items]
     return Digest(
         title=config.digest_title,
-        generated_at=datetime.now(timezone.utc),
+        generated_at=datetime.now(UTC),
         date=date,
         articles=limited,
         warnings=warnings,

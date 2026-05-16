@@ -28,7 +28,11 @@ class DedupeTests(unittest.TestCase):
     def test_keeps_distinct_urls_and_titles(self) -> None:
         articles = [
             Article(title="AI coding tool launches", url="https://example.com/a", source="A"),
-            Article(title="Database release notes published", url="https://example.com/b", source="B"),
+            Article(
+                title="Database release notes published",
+                url="https://example.com/b",
+                source="B",
+            ),
         ]
 
         self.assertEqual(len(dedupe_articles(articles)), 2)

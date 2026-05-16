@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import unittest
+from datetime import UTC, datetime
 
 from trosmic_digest_agent.models import AgentConfig, Article
 from trosmic_digest_agent.scoring import score_articles
@@ -21,7 +21,7 @@ class ScoringTests(unittest.TestCase):
         scored = score_articles(
             [article],
             config,
-            now=datetime(2026, 5, 16, 12, 0, tzinfo=timezone.utc),
+            now=datetime(2026, 5, 16, 12, 0, tzinfo=UTC),
         )
 
         self.assertGreater(scored[0].score, 5)

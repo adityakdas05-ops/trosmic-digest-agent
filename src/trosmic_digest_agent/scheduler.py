@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime
 import time
+from datetime import datetime
 
 from trosmic_digest_agent.main import main as run_digest
 

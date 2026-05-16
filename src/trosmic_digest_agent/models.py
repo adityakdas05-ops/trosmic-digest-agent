@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -64,7 +64,7 @@ class Article:
 @dataclass(slots=True)
 class Digest:
     title: str
-    generated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    generated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     date: str | None = None
     articles: list[Article] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)

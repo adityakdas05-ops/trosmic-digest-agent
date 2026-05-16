@@ -13,7 +13,7 @@ def load_dotenv(path: str | Path = ".env") -> None:
         return
 
     for raw_line in env_path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
+        line = raw_line.strip().lstrip("\ufeff")
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)

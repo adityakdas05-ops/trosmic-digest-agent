@@ -44,7 +44,11 @@ def render_markdown(digest: Digest, summary_sentences: int = 3) -> str:
     return "\n".join(lines)
 
 
-def write_digest_files(digest: Digest, output_dir: str | Path, summary_sentences: int = 3) -> tuple[Path, Path]:
+def write_digest_files(
+    digest: Digest,
+    output_dir: str | Path,
+    summary_sentences: int = 3,
+) -> tuple[Path, Path]:
     directory = Path(output_dir)
     directory.mkdir(parents=True, exist_ok=True)
     stem = digest.date or digest.generated_at.date().isoformat()

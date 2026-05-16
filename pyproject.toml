@@ -11,9 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 band = [
-  "thenvoi",
-  "langchain-openai",
-  "langgraph",
+  "thenvoi-sdk[langgraph]",
   "openai",
   "pyyaml",
 ]
