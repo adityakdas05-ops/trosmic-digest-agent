@@ -37,7 +37,7 @@ def render_markdown(digest: Digest, summary_sentences: int = 3) -> str:
     if not digest.articles:
         lines.extend(
             [
-                "No qualifying items crossed the Trosmic Relevance Gate today. Generic AI, generic tech, generic crypto, and general political stories are intentionally excluded unless tied to sports, media, venues, fan data, or Trosmic strategy.",
+                "Insufficient qualifying sports-business stories found from configured sources today.",
                 "",
             ]
         )
@@ -71,11 +71,7 @@ def render_markdown(digest: Digest, summary_sentences: int = 3) -> str:
 
 def _executive_signal(digest: Digest) -> str:
     if not digest.articles:
-        return (
-            "The useful signal is absence: nothing should enter Trosmic's daily brief unless it "
-            "clears the sports-business relevance bar. The agent is now sports/media/venue/capital "
-            "first."
-        )
+        return "Insufficient qualifying sports-business stories found from configured sources today."
     top = digest.articles[0]
     return (
         f"{top.affected_pillar or 'Sports business'} is the lead signal via "

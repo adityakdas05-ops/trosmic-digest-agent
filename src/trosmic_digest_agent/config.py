@@ -5,7 +5,10 @@ from pathlib import Path
 from typing import Any
 
 from trosmic_digest_agent.models import AgentConfig, SourceConfig
+from trosmic_digest_agent.source_policy import is_generic_ai_source_config
 from trosmic_digest_agent.trosmic_policy import DEFAULT_TROSMIC_INTERESTS, SPORTS_FIRST_QUERIES
+
+DEFAULT_SOURCE_CATALOG = Path("config/sources.yaml")
 
 
 def load_dotenv(path: str | Path = ".env") -> None:
@@ -31,21 +34,11 @@ def load_config(path: str | Path | None = None) -> AgentConfig:
         return AgentConfig(
             interests=list(DEFAULT_TROSMIC_INTERESTS),
             queries=list(SPORTS_FIRST_QUERIES),
+            sources=load_source_catalog(),
         )
 
     data = _load_yaml(config_path)
-    sources = [
-        SourceConfig(
-            name=str(item.get("name", item.get("url", "Unnamed Source"))),
-            type=str(item.get("type", "rss")).lower(),
-            url=item.get("url"),
-            urls=[str(url) for url in item.get("urls", [])],
-            enabled=_as_bool(item.get("enabled", True)),
-            weight=float(item.get("weight", 1.0)),
-        )
-        for item in data.get("sources", [])
-        if isinstance(item, dict)
-    ]
+    sources = _active_source_universe(_parse_sources(data.get("sources", [])))
 
     return AgentConfig(
         name=str(data.get("name", "Trosmic Digest Agent")),
@@ -55,9 +48,84 @@ def load_config(path: str | Path | None = None) -> AgentConfig:
         max_items=int(data.get("max_items", 12)),
         summary_sentences=int(data.get("summary_sentences", 3)),
         interests=[str(item) for item in data.get("interests", DEFAULT_TROSMIC_INTERESTS)],
-        queries=[str(item) for item in data.get("queries", SPORTS_FIRST_QUERIES)],
+        queries=_sports_first_queries(data.get("queries", SPORTS_FIRST_QUERIES)),
         sources=sources,
     )
+
+
+def load_source_catalog(path: str | Path = DEFAULT_SOURCE_CATALOG) -> list[SourceConfig]:
+    catalog_path = Path(path)
+    if not catalog_path.exists():
+        return []
+    return _parse_sources(_load_yaml(catalog_path).get("sources", []))
+
+
+def _parse_sources(raw_sources: Any) -> list[SourceConfig]:
+    return [
+        SourceConfig(
+            name=str(item.get("name", item.get("url", "Unnamed Source"))),
+            type=str(item.get("type", "rss")).lower(),
+            url=item.get("url"),
+            urls=[str(url) for url in item.get("urls", [])],
+            queries=[str(query) for query in item.get("queries", [])],
+            query_group=str(item.get("query_group", "")),
+            query_used=str(item.get("query_used", "")),
+            enabled=_as_bool(item.get("enabled", True)),
+            weight=float(item.get("weight", 1.0)),
+        )
+        for item in raw_sources
+        if isinstance(item, dict)
+    ]
+
+
+def _active_source_universe(config_sources: list[SourceConfig]) -> list[SourceConfig]:
+    sanitized = [
+        source
+        for source in config_sources
+        if not is_generic_ai_source_config(source)
+    ]
+    catalog_sources = load_source_catalog()
+    has_sports_query_connector = any(
+        source.enabled and source.type in {"google_news_search", "news_search", "search"}
+        for source in sanitized
+    )
+    if not sanitized or not has_sports_query_connector:
+        sanitized.extend(catalog_sources)
+    return sanitized
+
+
+def _sports_first_queries(raw_queries: Any) -> list[str]:
+    configured = [str(query) for query in raw_queries] if isinstance(raw_queries, list) else []
+    sports_like = [
+        query
+        for query in configured
+        if any(
+            term in query.lower()
+            for term in (
+                "sport",
+                "league",
+                "stadium",
+                "arena",
+                "venue",
+                "sponsorship",
+                "rights",
+                "franchise",
+                "kabaddi",
+                "ipl",
+                "wpl",
+                "bcci",
+                "ufc",
+                "wwe",
+                "nba",
+                "nfl",
+                "fifa",
+                "formula 1",
+                "fan",
+            )
+        )
+    ]
+    merged = [*SPORTS_FIRST_QUERIES, *sports_like]
+    return list(dict.fromkeys(merged))
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -102,7 +170,9 @@ def _load_simple_yaml(path: Path) -> dict[str, Any]:
 
         if indent >= 2 and line.startswith("- "):
             value = line[2:].strip()
-            if current_key == "sources":
+            if current_item is not None and nested_list_key and indent >= 4:
+                current_item.setdefault(nested_list_key, []).append(_parse_scalar(value))
+            elif current_key == "sources":
                 if ":" in value:
                     key, item_value = value.split(":", 1)
                     current_item = {key.strip(): _parse_scalar(item_value.strip())}
@@ -110,8 +180,6 @@ def _load_simple_yaml(path: Path) -> dict[str, Any]:
                     current_item = {}
                 root.setdefault(current_key, []).append(current_item)
                 nested_list_key = None
-            elif current_item is not None and nested_list_key:
-                current_item.setdefault(nested_list_key, []).append(_parse_scalar(value))
             else:
                 root.setdefault(current_key, []).append(_parse_scalar(value))
             continue

@@ -1,13 +1,13 @@
 # Trosmic Digest Agent
 
-Trosmic Digest Agent is a sports-business-first intelligence agent for Trosmic. It gathers updates from RSS feeds and manual URLs, removes duplicates, applies a Trosmic Relevance Gate, and writes a Markdown plus JSON digest focused on sports media rights, OTT distribution, sponsorship, venues, franchise economics, league governance, fan data, combat sports, kabaddi, India/GCC sports capital, and Rumil-relevant intelligence.
+Trosmic Digest Agent is a sports-business-first intelligence agent for Trosmic. It gathers updates from configured sports-business search groups, RSS feeds, and manual URLs, removes duplicates, applies a Trosmic Relevance Gate, and writes a Markdown plus JSON digest focused on sports media rights, OTT distribution, sponsorship, venues, franchise economics, league governance, fan data, combat sports, kabaddi, India/GCC sports capital, and Rumil-relevant intelligence.
 
 It is not an AI-news-first digest. Generic AI startup, product, funding, crypto, or politics stories are excluded unless they directly affect sports, media, entertainment, venues, fan engagement, content production, athlete data, league operations, sponsorship analytics, or Trosmic's Rumil/D2F strategy.
 
 ## What It Does
 
 - Loads local settings from `.env` and `agent_config.yaml`.
-- Fetches RSS feeds and manually listed web pages.
+- Fetches the sports-business source catalog in `config/sources.yaml`, plus any local RSS feeds and manually listed web pages.
 - Normalizes articles into a small internal model.
 - Removes exact and near-duplicate stories.
 - Scores every item using the 21-point Trosmic Relevance Gate.
@@ -16,7 +16,7 @@ It is not an AI-news-first digest. Generic AI startup, product, funding, crypto,
 
 ## Trosmic Relevance Gate
 
-Every item must score at least 13 out of 21 before it enters the digest:
+Every item must score at least 14 out of 21 before it enters the digest:
 
 - Direct relevance to a Trosmic pillar: 0-5
 - Commercial materiality: 0-5
@@ -40,7 +40,7 @@ Source priority:
 
 The rendered digest sections are Executive Signal of the Day, Top 10 Trosmic-Relevant Developments, Opportunity Radar, Risk/Weak Signal Watchlist, Data Points to Save, and a 700-1,000 word Strategic Op-Ed.
 
-Each run also prints and saves debug diagnostics to `digests/debug-YYYY-MM-DD.json`: total stories fetched, generic AI rejections, generic tech rejections, no-pillar rejections, eligibility-pass count, final selected titles, selected relevance scores and pillars, and the number of AI-led items selected.
+Each run also prints and saves debug diagnostics to `digests/debug-YYYY-MM-DD.json`: total stories fetched, top fetched domains, per-story source domain/query metadata, generic AI rejections, generic tech rejections, no-pillar rejections, eligibility-pass count, final selected titles, selected relevance scores and pillars, and the number of AI-led items selected.
 
 ## Local Setup
 

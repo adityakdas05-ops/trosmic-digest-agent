@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 
 from trosmic_digest_agent.config import load_config
 from trosmic_digest_agent.digest import build_digest
@@ -10,6 +11,8 @@ from trosmic_digest_agent.renderers import render_markdown, write_digest_files
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description="Generate a Trosmic digest.")
     parser.add_argument("--config", help="Path to agent_config.yaml")
     parser.add_argument("--date", help="Digest date label, e.g. 2026-05-16")
@@ -54,6 +57,14 @@ def print_debug_summary(digest: Digest) -> None:
     print("Debug:")
     print(f"PIPELINE_VERSION={debug.pipeline_version}")
     print(f"1. Total stories fetched: {debug.total_stories_fetched}")
+    print("Top fetched domains:")
+    if debug.top_fetched_domains:
+        for item in debug.top_fetched_domains:
+            print(f"{item['domain']}: {item['count']}")
+    else:
+        print("None")
+    if debug.source_pool_contaminated_with_generic_ai:
+        print("WARNING: SOURCE_POOL_CONTAMINATED_WITH_GENERIC_AI")
     print("2. Top 30 fetched story titles:")
     if debug.top_30_fetched_titles:
         for index, title in enumerate(debug.top_30_fetched_titles, start=1):
@@ -83,6 +94,8 @@ def print_debug_summary(digest: Digest) -> None:
     else:
         print("   None")
     print(f"6. AI-led items selected: {debug.ai_led_items_selected}")
+    if debug.empty_digest_reason:
+        print(f"7. Empty digest reason: {debug.empty_digest_reason}")
 
 
 if __name__ == "__main__":

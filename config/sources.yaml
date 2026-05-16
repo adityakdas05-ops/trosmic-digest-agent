@@ -1,0 +1,77 @@
+sources:
+  - name: Sports Business Media Rights Search
+    type: google_news_search
+    query_group: media_rights
+    queries:
+      - latest sports media rights deal
+      - latest OTT sports streaming rights
+      - latest Netflix Amazon YouTube sports rights
+      - latest broadcast rights sports league deal
+    enabled: true
+  - name: Sports Business Sponsorship Search
+    type: google_news_search
+    query_group: sponsorship
+    queries:
+      - latest sports sponsorship deal
+      - latest stadium naming rights deal
+      - latest jersey sponsorship sports deal
+      - latest sports brand partnership activation
+    enabled: true
+  - name: Sports Business Venues Search
+    type: google_news_search
+    query_group: venues
+    queries:
+      - latest stadium arena project financing
+      - latest sports venue investment
+      - latest live entertainment venue project
+      - latest arena naming rights deal
+    enabled: true
+  - name: Sports Business Capital Search
+    type: google_news_search
+    query_group: capital
+    queries:
+      - latest sports franchise sale valuation
+      - latest sports private equity investment
+      - latest sovereign wealth sports investment
+      - latest sports M&A deal
+    enabled: true
+  - name: India Sports Business Search
+    type: google_news_search
+    query_group: india_sports
+    queries:
+      - latest IPL BCCI media rights sponsorship
+      - latest WPL viewership sponsorship rights
+      - latest Pro Kabaddi League media rights sponsorship
+      - latest kabaddi international federation
+      - latest Indian sports business
+    enabled: true
+  - name: Global Leagues Sports Business Search
+    type: google_news_search
+    query_group: global_leagues
+    queries:
+      - latest UFC TKO media rights sponsorship
+      - latest WWE Netflix sports entertainment deal
+      - latest Formula 1 sponsorship media rights
+      - latest NBA media rights franchise valuation
+      - latest NFL media rights franchise valuation
+      - latest FIFA IOC commercial rights sponsorship
+    enabled: true
+  - name: GCC Sports Business Search
+    type: google_news_search
+    query_group: gcc
+    queries:
+      - latest Saudi sports investment
+      - latest UAE sports investment
+      - latest Dubai sports entertainment venue investment
+      - latest Qatar sports investment
+      - latest GCC sports infrastructure investment
+    enabled: true
+  - name: Sports Fan Data Search
+    type: google_news_search
+    query_group: fan_data
+    queries:
+      - latest sports fan engagement platform
+      - latest fantasy sports regulation
+      - latest sports data analytics sponsorship
+      - latest AI sports broadcast production fan analytics
+    enabled: true

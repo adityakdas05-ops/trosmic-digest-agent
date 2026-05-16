@@ -7,6 +7,7 @@ from xml.etree import ElementTree
 
 from trosmic_digest_agent.connectors.base import Connector
 from trosmic_digest_agent.models import Article
+from trosmic_digest_agent.source_policy import normalize_domain
 
 
 class RSSConnector(Connector):
@@ -16,10 +17,22 @@ class RSSConnector(Connector):
         request = Request(self.source.url, headers={"User-Agent": "trosmic-digest-agent/0.1"})
         with urlopen(request, timeout=self.timeout) as response:
             payload = response.read()
-        return parse_rss(payload, source_name=self.source.name)
+        return parse_rss(
+            payload,
+            source_name=self.source.name,
+            connector="rss",
+            query_group=self.source.query_group,
+            query_used=self.source.query_used,
+        )
 
 
-def parse_rss(payload: bytes | str, source_name: str) -> list[Article]:
+def parse_rss(
+    payload: bytes | str,
+    source_name: str,
+    connector: str = "rss",
+    query_group: str = "",
+    query_used: str = "",
+) -> list[Article]:
     root = ElementTree.fromstring(payload)
     articles: list[Article] = []
 
@@ -28,14 +41,21 @@ def parse_rss(payload: bytes | str, source_name: str) -> list[Article]:
         url = _text(item, "link") or _text(item, "guid") or ""
         summary = _text(item, "description") or ""
         published = _parse_date(_text(item, "pubDate") or _text(item, "published"))
+        source_element = item.find("source")
+        item_source_name = _text(item, "source") or source_name
+        source_url = source_element.attrib.get("url", "") if source_element is not None else ""
         if url:
             articles.append(
                 Article(
                     title=title.strip(),
                     url=url.strip(),
-                    source=source_name,
+                    source=item_source_name.strip(),
                     published_at=published,
                     summary=summary.strip(),
+                    source_domain=normalize_domain(source_url or url),
+                    connector=connector,
+                    query_group=query_group,
+                    query_used=query_used,
                 )
             )
 
@@ -60,6 +80,10 @@ def parse_rss(payload: bytes | str, source_name: str) -> list[Article]:
                     source=source_name,
                     published_at=published,
                     summary=summary.strip(),
+                    source_domain=normalize_domain(url),
+                    connector=connector,
+                    query_group=query_group,
+                    query_used=query_used,
                 )
             )
 

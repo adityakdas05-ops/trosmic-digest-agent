@@ -11,6 +11,9 @@ class SourceConfig:
     type: str
     url: str | None = None
     urls: list[str] = field(default_factory=list)
+    queries: list[str] = field(default_factory=list)
+    query_group: str = ""
+    query_used: str = ""
     enabled: bool = True
     weight: float = 1.0
 
@@ -37,6 +40,10 @@ class Article:
     summary: str = ""
     content: str = ""
     author: str | None = None
+    source_domain: str = ""
+    connector: str = ""
+    query_group: str = ""
+    query_used: str = ""
     score: float = 0.0
     matched_interests: list[str] = field(default_factory=list)
     relevance_score: int = 0
@@ -99,6 +106,12 @@ class DigestDebug:
     pipeline_version: str = ""
     total_stories_fetched: int = 0
     top_30_fetched_titles: list[str] = field(default_factory=list)
+    top_fetched_domains: list[dict[str, Any]] = field(default_factory=list)
+    fetched_stories: list[dict[str, Any]] = field(default_factory=list)
+    generic_ai_vendor_source_count: int = 0
+    generic_ai_vendor_source_ratio: float = 0.0
+    source_pool_contaminated_with_generic_ai: bool = False
+    empty_digest_reason: str = ""
     rejected_generic_ai_or_tech_titles: list[str] = field(default_factory=list)
     rejected_generic_ai_count: int = 0
     rejected_generic_tech_count: int = 0

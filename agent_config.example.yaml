@@ -44,8 +44,8 @@ interests:
 queries:
   - latest sports media rights deal
   - latest OTT sports streaming rights
-  - latest broadcast rights sports league deal
   - latest Netflix Amazon YouTube sports rights
+  - latest broadcast rights sports league deal
   - latest sports sponsorship deal
   - latest stadium naming rights deal
   - latest jersey sponsorship sports deal
@@ -58,23 +58,26 @@ queries:
   - latest sports private equity investment
   - latest sovereign wealth sports investment
   - latest sports M&A deal
-  - latest IPL BCCI sponsorship media rights
+  - latest IPL BCCI media rights sponsorship
   - latest WPL viewership sponsorship rights
   - latest Pro Kabaddi League media rights sponsorship
-  - latest kabaddi international federation news
+  - latest kabaddi international federation
+  - latest Indian sports business
   - latest UFC TKO media rights sponsorship
-  - latest WWE Netflix sports entertainment
+  - latest WWE Netflix sports entertainment deal
   - latest Formula 1 sponsorship media rights
   - latest NBA media rights franchise valuation
   - latest NFL media rights franchise valuation
+  - latest FIFA IOC commercial rights sponsorship
   - latest Saudi sports investment
   - latest UAE sports investment
-  - latest Dubai sports entertainment venue
+  - latest Dubai sports entertainment venue investment
   - latest Qatar sports investment
+  - latest GCC sports infrastructure investment
   - latest sports fan engagement platform
   - latest fantasy sports regulation
   - latest sports data analytics sponsorship
-  - latest sports AI broadcast production fan analytics
+  - latest AI sports broadcast production fan analytics
 sources:
   - name: Tier 1 Official / Filings Watchlist
     type: manual

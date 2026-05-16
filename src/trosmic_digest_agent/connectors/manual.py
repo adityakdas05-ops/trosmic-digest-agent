@@ -6,6 +6,7 @@ from urllib.request import Request, urlopen
 
 from trosmic_digest_agent.connectors.base import Connector
 from trosmic_digest_agent.models import Article
+from trosmic_digest_agent.source_policy import normalize_domain
 
 
 class ManualURLConnector(Connector):
@@ -23,7 +24,16 @@ class ManualURLConnector(Connector):
             payload = response.read().decode("utf-8", errors="replace")
         title = extract_title(payload) or url
         summary = extract_description(payload)
-        return Article(title=title, url=url, source=self.source.name, summary=summary)
+        return Article(
+            title=title,
+            url=url,
+            source=self.source.name,
+            summary=summary,
+            source_domain=normalize_domain(url),
+            connector="manual",
+            query_group=self.source.query_group,
+            query_used=self.source.query_used,
+        )
 
 
 def extract_title(html: str) -> str | None:
