@@ -103,6 +103,67 @@ To keep it running on a daily loop, use:
 uv run python -m trosmic_digest_agent.scheduler.run_daily --loop --time 08:00
 ```
 
+## Daily Scheduled Email Digest
+
+The repository includes a GitHub Actions workflow at `.github/workflows/daily-digest-email.yml`.
+It runs every day at `03:45 UTC`, which is `09:15 IST`, and can also be started manually.
+
+Add these repository secrets in GitHub under **Settings > Secrets and variables > Actions > Repository secrets**:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `EMAIL_FROM`
+- `EMAIL_TO`
+- `EMAIL_CC` (optional)
+- `OPENAI_API_KEY` (optional unless your source configuration needs it)
+- `NEWSAPI_KEY` (optional unless your source configuration needs it)
+- `SERPAPI_API_KEY` (optional unless your source configuration needs it)
+- `PERPLEXITY_API_KEY` (optional unless your source configuration needs it)
+- `BAND_AGENT_ID` (optional; not required for daily email delivery)
+- `BAND_API_KEY` (optional; not required for daily email delivery)
+
+To run it manually, open the repository in GitHub, go to **Actions**, select
+**Daily Digest Email**, choose **Run workflow**, and start the run from `main`.
+
+To change the scheduled time, edit the cron line in
+`.github/workflows/daily-digest-email.yml`:
+
+```yaml
+- cron: "45 3 * * *"
+```
+
+GitHub Actions schedules use UTC. For example, `45 3 * * *` means 03:45 UTC.
+
+To test locally before configuring SMTP:
+
+```bash
+uv run python -m trosmic_digest_agent.scheduler.run_daily_email
+```
+
+It will generate the digest files, skip email delivery, and print this clear error when SMTP
+settings are not configured:
+
+```text
+SMTP settings missing. Configure SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM, EMAIL_TO.
+```
+
+To test local sending, set your provider's SMTP values first:
+
+```bash
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USERNAME=your-smtp-user
+SMTP_PASSWORD=your-smtp-password
+EMAIL_FROM=digest@example.com
+EMAIL_TO=you@example.com
+EMAIL_CC=optional@example.com
+```
+
+Most providers use port `587` with STARTTLS. Some providers use port `465` with
+SMTP over SSL. Use an app password or SMTP token if your provider requires one.
+
 ## Optional Band Runtime
 
 Install optional remote-agent dependencies only when you need the Band runtime:
