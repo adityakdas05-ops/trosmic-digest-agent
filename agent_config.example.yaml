@@ -1,0 +1,21 @@
+name: Trosmic Digest Agent
+timezone: Asia/Calcutta
+digest_title: Trosmic Daily Digest
+output_dir: digests
+max_items: 12
+summary_sentences: 3
+interests:
+  - AI agents
+  - developer tools
+  - open source
+  - product launches
+sources:
+  - name: OpenAI News
+    type: rss
+    url: https://openai.com/news/rss.xml
+    enabled: true
+  - name: Manual Reading List
+    type: manual
+    urls:
+      - https://example.com/
+    enabled: false
