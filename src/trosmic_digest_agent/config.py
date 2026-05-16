@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from trosmic_digest_agent.models import AgentConfig, SourceConfig
+from trosmic_digest_agent.trosmic_policy import DEFAULT_TROSMIC_INTERESTS, SPORTS_FIRST_QUERIES
 
 
 def load_dotenv(path: str | Path = ".env") -> None:
@@ -27,7 +28,10 @@ def load_config(path: str | Path | None = None) -> AgentConfig:
     load_dotenv()
     config_path = Path(path or os.environ.get("TROSMIC_CONFIG", "agent_config.yaml"))
     if not config_path.exists():
-        return AgentConfig()
+        return AgentConfig(
+            interests=list(DEFAULT_TROSMIC_INTERESTS),
+            queries=list(SPORTS_FIRST_QUERIES),
+        )
 
     data = _load_yaml(config_path)
     sources = [
@@ -50,7 +54,8 @@ def load_config(path: str | Path | None = None) -> AgentConfig:
         output_dir=str(data.get("output_dir", "digests")),
         max_items=int(data.get("max_items", 12)),
         summary_sentences=int(data.get("summary_sentences", 3)),
-        interests=[str(item) for item in data.get("interests", [])],
+        interests=[str(item) for item in data.get("interests", DEFAULT_TROSMIC_INTERESTS)],
+        queries=[str(item) for item in data.get("queries", SPORTS_FIRST_QUERIES)],
         sources=sources,
     )
 

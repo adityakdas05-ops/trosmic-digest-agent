@@ -10,12 +10,12 @@ class DedupeTests(unittest.TestCase):
     def test_removes_near_duplicate_headlines_with_token_overlap(self) -> None:
         articles = [
             Article(
-                title="OpenAI releases new agent developer tools",
+                title="IPL media rights sponsorship package expands",
                 url="https://example.com/a",
                 source="A",
             ),
             Article(
-                title="New OpenAI developer tools for agents released",
+                title="New IPL sponsorship package expands media rights",
                 url="https://example.com/b",
                 source="B",
             ),
@@ -27,9 +27,9 @@ class DedupeTests(unittest.TestCase):
 
     def test_keeps_distinct_urls_and_titles(self) -> None:
         articles = [
-            Article(title="AI coding tool launches", url="https://example.com/a", source="A"),
+            Article(title="UFC media rights deal renewed", url="https://example.com/a", source="A"),
             Article(
-                title="Database release notes published",
+                title="Dubai arena financing plan approved",
                 url="https://example.com/b",
                 source="B",
             ),

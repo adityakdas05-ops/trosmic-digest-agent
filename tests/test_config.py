@@ -21,7 +21,7 @@ class ConfigTests(unittest.TestCase):
                         "max_items: 5",
                         "summary_sentences: 2",
                         "interests:",
-                        "  - AI agents",
+                        "  - sports media rights",
                         "sources:",
                         "  - name: Feed",
                         "    type: rss",
@@ -36,7 +36,7 @@ class ConfigTests(unittest.TestCase):
 
         self.assertEqual(config.name, "Test Agent")
         self.assertEqual(config.max_items, 5)
-        self.assertEqual(config.interests, ["AI agents"])
+        self.assertEqual(config.interests, ["sports media rights"])
         self.assertEqual(config.sources[0].name, "Feed")
         self.assertTrue(config.sources[0].enabled)
 

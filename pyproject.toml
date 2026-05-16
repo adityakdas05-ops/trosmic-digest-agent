@@ -9,13 +9,20 @@ authors = [
 ]
 dependencies = []
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project.optional-dependencies]
 band = [
   "thenvoi-sdk[langgraph]",
   "openai",
   "pyyaml",
 ]
+
+[dependency-groups]
 dev = [
+  "pytest>=9.0.3",
   "ruff",
 ]
 
@@ -23,8 +30,11 @@ dev = [
 trosmic-digest = "trosmic_digest_agent.main:main"
 trosmic-digest-scheduler = "trosmic_digest_agent.scheduler:main"
 
-[tool.uv]
-package = false
+[tool.hatch.build.targets.wheel]
+packages = ["src/trosmic_digest_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
@@ -33,7 +43,6 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
-[dependency-groups]
-dev = [
-    "pytest>=9.0.3",
-]
+[tool.ruff.lint.per-file-ignores]
+"src/trosmic_digest_agent/renderers.py" = ["E501"]
+"src/trosmic_digest_agent/trosmic_policy.py" = ["E501"]

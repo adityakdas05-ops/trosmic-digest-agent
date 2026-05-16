@@ -2061,7 +2061,7 @@ wheels = [
 [[package]]
 name = "trosmic-digest-agent"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 
 [package.optional-dependencies]
 band = [
@@ -2069,26 +2069,26 @@ band = [
     { name = "pyyaml" },
     { name = "thenvoi-sdk", extra = ["langgraph"] },
 ]
-dev = [
-    { name = "ruff" },
-]
 
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "openai", marker = "extra == 'band'" },
     { name = "pyyaml", marker = "extra == 'band'" },
-    { name = "ruff", marker = "extra == 'dev'" },
     { name = "thenvoi-sdk", extras = ["langgraph"], marker = "extra == 'band'" },
 ]
-provides-extras = ["band", "dev"]
+provides-extras = ["band"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.3" }]
+dev = [
+    { name = "pytest", specifier = ">=9.0.3" },
+    { name = "ruff" },
+]
 
 [[package]]
 name = "typing-extensions"

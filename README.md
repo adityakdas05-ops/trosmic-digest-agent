@@ -1,6 +1,8 @@
 # Trosmic Digest Agent
 
-Trosmic Digest Agent is a local-first Python agent that gathers updates from RSS feeds and manual URLs, removes duplicates, scores items against your interests, and writes a Markdown plus JSON digest. The core package uses only the Python standard library so it can run in constrained environments. Optional Band/OpenAI dependencies are loaded only when you run the remote-agent entry point.
+Trosmic Digest Agent is a sports-business-first intelligence agent for Trosmic. It gathers updates from RSS feeds and manual URLs, removes duplicates, applies a Trosmic Relevance Gate, and writes a Markdown plus JSON digest focused on sports media rights, OTT distribution, sponsorship, venues, franchise economics, league governance, fan data, combat sports, kabaddi, India/GCC sports capital, and Rumil-relevant intelligence.
+
+It is not an AI-news-first digest. Generic AI startup, product, funding, crypto, or politics stories are excluded unless they directly affect sports, media, entertainment, venues, fan engagement, content production, athlete data, league operations, sponsorship analytics, or Trosmic's Rumil/D2F strategy.
 
 ## What It Does
 
@@ -8,9 +10,37 @@ Trosmic Digest Agent is a local-first Python agent that gathers updates from RSS
 - Fetches RSS feeds and manually listed web pages.
 - Normalizes articles into a small internal model.
 - Removes exact and near-duplicate stories.
-- Scores items by source quality, interest matches, and recency.
-- Produces a daily Markdown digest and a companion JSON artifact.
+- Scores every item using the 21-point Trosmic Relevance Gate.
+- Produces a structured sports-business intelligence digest and companion JSON artifact.
 - Provides an optional Band runtime entry point for hosted/remote operation.
+
+## Trosmic Relevance Gate
+
+Every item must score at least 13 out of 21 before it enters the digest:
+
+- Direct relevance to a Trosmic pillar: 0-5
+- Commercial materiality: 0-5
+- Strategic insight value: 0-5
+- Actionability for Trosmic: 0-3
+- Source credibility: 0-3
+
+Additional hard rules:
+
+- Generic AI, generic tech, generic startup, SaaS, cloud, chips, crypto, and Web3 stories are rejected unless they have a direct sports/media/entertainment/venue/fan-data link.
+- No sports/media/entertainment/venue/capital link means automatic rejection.
+- No clear Trosmic implication means automatic rejection.
+- At most one AI-led item can enter the Top 10, and only when it directly affects sports broadcast production, fan analytics, venue operations, sponsorship analytics, athlete data, or media rights.
+
+Source priority:
+
+- Tier 1: official league, company, government, and filing sources
+- Tier 2: Reuters, Bloomberg, FT, CNBC, SBJ, SportBusiness, SportsPro, ESPN, Variety, Deadline, Economic Times, Mint, Business Standard, Sportstar
+- Tier 3: KPMG, Deloitte, PwC, EY-FICCI, GroupM/WPP, Nielsen, BARC, Kearney, Houlihan Lokey
+- Tier 4: LinkedIn, social, and weak signals, clearly labelled
+
+The rendered digest sections are Executive Signal of the Day, Top 10 Trosmic-Relevant Developments, Opportunity Radar, Risk/Weak Signal Watchlist, Data Points to Save, and a 700-1,000 word Strategic Op-Ed.
+
+Each run also prints and saves debug diagnostics to `digests/debug-YYYY-MM-DD.json`: total stories fetched, generic AI rejections, generic tech rejections, no-pillar rejections, eligibility-pass count, final selected titles, selected relevance scores and pillars, and the number of AI-led items selected.
 
 ## Local Setup
 
@@ -25,15 +55,16 @@ Edit `agent_config.yaml` with your sources and interests. Do not put API keys in
 ## Run Tests
 
 ```bash
-PYTHONPATH=src uv run python -m unittest discover -s tests
-PYTHONPATH=src uv run python -m compileall src tests
+uv run python -m pytest
+uv run python -m unittest discover -s tests
+uv run python -m compileall src tests
 ruff check .
 ```
 
 On Windows PowerShell, use:
 
 ```powershell
-$env:PYTHONPATH='src'
+uv run python -m pytest
 uv run python -m unittest discover -s tests
 uv run python -m compileall src tests
 ruff check .
@@ -42,14 +73,14 @@ ruff check .
 ## Generate A Digest
 
 ```bash
-PYTHONPATH=src uv run python -m trosmic_digest_agent.main
+uv run python -m trosmic_digest_agent.main
 ```
 
 Useful flags:
 
 ```bash
-PYTHONPATH=src uv run python -m trosmic_digest_agent.main --config agent_config.yaml --date 2026-05-16 --print
-PYTHONPATH=src uv run python -m trosmic_digest_agent.main --output-dir digests
+uv run python -m trosmic_digest_agent.main --config agent_config.yaml --date 2026-05-16 --print
+uv run python -m trosmic_digest_agent.main --output-dir digests
 ```
 
 ## Scheduler
@@ -57,7 +88,19 @@ PYTHONPATH=src uv run python -m trosmic_digest_agent.main --output-dir digests
 The scheduler is intentionally simple and local. It runs the digest once per day at a configured local time.
 
 ```bash
-PYTHONPATH=src uv run python -m trosmic_digest_agent.scheduler --time 08:00
+uv run python -m trosmic_digest_agent.scheduler --time 08:00
+```
+
+To run the daily job once immediately, use:
+
+```bash
+uv run python -m trosmic_digest_agent.scheduler.run_daily
+```
+
+To keep it running on a daily loop, use:
+
+```bash
+uv run python -m trosmic_digest_agent.scheduler.run_daily --loop --time 08:00
 ```
 
 ## Optional Band Runtime
@@ -66,7 +109,7 @@ Install optional remote-agent dependencies only when you need the Band runtime:
 
 ```bash
 uv pip install "thenvoi-sdk[langgraph]" openai pyyaml
-PYTHONPATH=src uv run python -m trosmic_digest_agent.band_app
+uv run python -m trosmic_digest_agent.band_app
 ```
 
 Required secrets belong in your local `.env`, not in Git:

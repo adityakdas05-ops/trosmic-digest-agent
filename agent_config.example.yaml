@@ -1,21 +1,129 @@
 name: Trosmic Digest Agent
 timezone: Asia/Calcutta
-digest_title: Trosmic Daily Digest
+digest_title: Trosmic Sports Business Intelligence Digest
 output_dir: digests
-max_items: 12
+max_items: 10
 summary_sentences: 3
 interests:
-  - AI agents
-  - developer tools
-  - open source
-  - product launches
+  - sports media rights
+  - OTT sports streaming
+  - league expansion
+  - franchise valuation
+  - sports sponsorship
+  - naming rights
+  - stadium financing
+  - arena development
+  - sports private equity
+  - sovereign wealth sports investment
+  - kabaddi
+  - Pro Kabaddi League
+  - IPL
+  - WPL
+  - BCCI
+  - UFC
+  - TKO
+  - WWE
+  - Formula 1
+  - NBA
+  - NFL
+  - FIFA
+  - IOC
+  - EPL
+  - MLS
+  - Saudi sports investment
+  - UAE sports investment
+  - Qatar sports investment
+  - fan engagement
+  - fantasy sports
+  - sports gaming
+  - sports data
+  - direct-to-fan
+  - sports AI
+  - broadcast production
+  - athlete data
+queries:
+  - latest sports media rights deal
+  - latest OTT sports streaming rights
+  - latest broadcast rights sports league deal
+  - latest Netflix Amazon YouTube sports rights
+  - latest sports sponsorship deal
+  - latest stadium naming rights deal
+  - latest jersey sponsorship sports deal
+  - latest sports brand partnership activation
+  - latest stadium arena project financing
+  - latest sports venue investment
+  - latest live entertainment venue project
+  - latest arena naming rights deal
+  - latest sports franchise sale valuation
+  - latest sports private equity investment
+  - latest sovereign wealth sports investment
+  - latest sports M&A deal
+  - latest IPL BCCI sponsorship media rights
+  - latest WPL viewership sponsorship rights
+  - latest Pro Kabaddi League media rights sponsorship
+  - latest kabaddi international federation news
+  - latest UFC TKO media rights sponsorship
+  - latest WWE Netflix sports entertainment
+  - latest Formula 1 sponsorship media rights
+  - latest NBA media rights franchise valuation
+  - latest NFL media rights franchise valuation
+  - latest Saudi sports investment
+  - latest UAE sports investment
+  - latest Dubai sports entertainment venue
+  - latest Qatar sports investment
+  - latest sports fan engagement platform
+  - latest fantasy sports regulation
+  - latest sports data analytics sponsorship
+  - latest sports AI broadcast production fan analytics
 sources:
-  - name: OpenAI News
-    type: rss
-    url: https://openai.com/news/rss.xml
-    enabled: true
-  - name: Manual Reading List
+  - name: Tier 1 Official / Filings Watchlist
     type: manual
     urls:
-      - https://example.com/
+      - https://www.bcci.tv/
+      - https://www.iplt20.com/
+      - https://www.prokabaddi.com/
+      - https://www.nba.com/news/
+      - https://www.nfl.com/news/
+      - https://www.formula1.com/
+      - https://www.tko.com/investors/
+      - https://www.wwe.com/
+      - https://www.fifa.com/
+      - https://olympics.com/ioc
+      - https://www.dubaisc.ae/
+      - https://mos.gov.sa/
+      - https://qiddiya.com/
+      - https://www.pif.gov.sa/
+      - https://www.sec.gov/
+    enabled: false
+  - name: Tier 2 Reported Sports Business Sources
+    type: manual
+    urls:
+      - https://www.reuters.com/sports/
+      - https://www.bloomberg.com/
+      - https://www.sportsbusinessjournal.com/
+      - https://www.sportbusiness.com/
+      - https://www.sportspromedia.com/
+      - https://frontofficesports.com/
+      - https://www.espn.com/
+      - https://www.nytimes.com/athletic/
+      - https://variety.com/
+      - https://deadline.com/
+      - https://www.cnbc.com/sports/
+      - https://economictimes.indiatimes.com/
+      - https://www.livemint.com/
+      - https://www.business-standard.com/
+      - https://sportstar.thehindu.com/
+    enabled: false
+  - name: Tier 3 Market Reports / Consulting
+    type: manual
+    urls:
+      - https://www2.deloitte.com/
+      - https://www.pwc.com/
+      - https://www.kpmg.com/
+      - https://www.nielsen.com/
+    enabled: false
+  - name: Tier 4 Weak Signals
+    type: manual
+    urls:
+      - https://www.linkedin.com/
     enabled: false

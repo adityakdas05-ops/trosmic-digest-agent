@@ -4,13 +4,15 @@ from datetime import UTC, datetime
 
 from trosmic_digest_agent.connectors import ManualURLConnector, RSSConnector
 from trosmic_digest_agent.dedupe import dedupe_articles
-from trosmic_digest_agent.models import AgentConfig, Article, Digest, SourceConfig
+from trosmic_digest_agent.models import AgentConfig, Article, Digest, DigestDebug, SourceConfig
+from trosmic_digest_agent.pipeline.eligibility import PIPELINE_VERSION
 from trosmic_digest_agent.scoring import score_articles
 
 
 def build_digest(config: AgentConfig, date: str | None = None) -> Digest:
     warnings: list[str] = []
     articles: list[Article] = []
+    debug = DigestDebug(pipeline_version=PIPELINE_VERSION)
 
     for source in config.sources:
         if not source.enabled:
@@ -20,15 +22,18 @@ def build_digest(config: AgentConfig, date: str | None = None) -> Digest:
         except Exception as exc:  # noqa: BLE001 - keep batch digest resilient per source.
             warnings.append(f"{source.name}: {exc}")
 
+    debug.total_stories_fetched = len(articles)
+    debug.top_30_fetched_titles = [article.title for article in articles[:30]]
+
     deduped = dedupe_articles(articles)
-    scored = score_articles(deduped, config)
-    limited = scored[: config.max_items]
+    limited = score_articles(deduped, config, debug=debug)
     return Digest(
         title=config.digest_title,
         generated_at=datetime.now(UTC),
         date=date,
         articles=limited,
         warnings=warnings,
+        debug=debug,
     )
 
 
